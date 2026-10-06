@@ -33,3 +33,20 @@ databaseChangeLog:
             relativeToChangelogFile: true
             splitStatements: false
             stripComments: false
+  - changeSet:
+      id: ddl-tables-003
+      author: JUANDAX233
+      labels: "HU-LOY-001,ddl,tables"
+      comment: "loyalty_transaction: the append-only log behind StickerGranted and RewardRedeemed."
+      changes:
+        - sqlFile:
+            path: 003_create_loyalty_transaction.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/03_tables/003_create_loyalty_transaction.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false
