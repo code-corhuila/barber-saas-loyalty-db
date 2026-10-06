@@ -1,1 +1,18 @@
-databaseChangeLog: []
+databaseChangeLog:
+  - changeSet:
+      id: ddl-schemas-001
+      author: JUANDAX233
+      labels: "HU-LOY-001,ddl,schemas"
+      comment: "The loyalty schema. Nothing of this domain lives in public (Annex J J.4)."
+      changes:
+        - sqlFile:
+            path: 001_create_schema_loyalty.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/01_schemas/001_create_schema_loyalty.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false
