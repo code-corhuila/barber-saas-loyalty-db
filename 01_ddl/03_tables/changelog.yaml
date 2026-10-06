@@ -67,3 +67,20 @@ databaseChangeLog:
             relativeToChangelogFile: true
             splitStatements: false
             stripComments: false
+  - changeSet:
+      id: ddl-tables-005
+      author: JUANDAX233
+      labels: "HU-LOY-001,ddl,tables"
+      comment: "idempotency_key: makes every grant and redemption safe to retry (norm 5.3.8, DEC-LOY-01)."
+      changes:
+        - sqlFile:
+            path: 005_create_idempotency_key.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/03_tables/005_create_idempotency_key.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false
