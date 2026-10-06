@@ -1,1 +1,18 @@
-databaseChangeLog: []
+databaseChangeLog:
+  - changeSet:
+      id: dcl-roles-001
+      author: JUANDAX233
+      labels: "HU-LOY-001,dcl,roles"
+      comment: "Reader and writer roles of loyalty; names start with the domain because roles belong to the whole instance (Annex J J.4)."
+      changes:
+        - sqlFile:
+            path: 001_create_roles.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/03_dcl/00_roles/001_create_roles.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false
