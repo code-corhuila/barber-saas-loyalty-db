@@ -1,0 +1,57 @@
+name: Database rebuild
+
+# The whole changelog must build the loyalty schema from an EMPTY database, every rollback must
+# work, and the chain must apply again afterwards. The job first prepares what the single
+# instance provides in every environment (pgcrypto and the loyalty_app user,
+# Annex J J.4, J.7).
+
+on:
+  pull_request:
+    branches: [develop, qa, main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:16.4-alpine
+        env:
+          POSTGRES_DB: barbersaas
+          POSTGRES_USER: barbersaas_admin
+          POSTGRES_PASSWORD: ci-only
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U barbersaas_admin -d barbersaas"
+          --health-interval 5s --health-timeout 3s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare the instance as barber-saas-infra-postgres does
+        env:
+          PGPASSWORD: ci-only
+        run: |
+          psql -h localhost -U barbersaas_admin -d barbersaas -v ON_ERROR_STOP=1 \
+            -c "CREATE EXTENSION IF NOT EXISTS pgcrypto" \
+            -c "CREATE ROLE loyalty_app LOGIN PASSWORD 'ci-only'"
+      - name: Apply, roll everything back, apply again
+        run: |
+          lb() {
+            docker run --rm --network host -v "$PWD:/workspace:ro" liquibase/liquibase:4.29 \
+              --search-path=/workspace --changelog-file=changelog/changelog-master.yaml \
+              --url=jdbc:postgresql://localhost:5432/barbersaas \
+              --username=barbersaas_admin --password=ci-only \
+              --database-changelog-table-name=databasechangelog_loyalty \
+              --database-changelog-lock-table-name=databasechangeloglock_loyalty "$@"
+          }
+          lb update
+          lb update | tee second.txt
+          grep -q "Run:  *0" second.txt || { echo "second update applied changes: not incremental"; exit 1; }
+          lb rollback-count 999
+          lb update
