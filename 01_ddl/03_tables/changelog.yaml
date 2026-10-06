@@ -84,3 +84,20 @@ databaseChangeLog:
             relativeToChangelogFile: true
             splitStatements: false
             stripComments: false
+  - changeSet:
+      id: ddl-tables-006
+      author: JUANDAX233
+      labels: "HU-LOY-001,ddl,tables"
+      comment: "outbox_event: StickerGranted and RewardRedeemed commit with their change (norm 5.3.11, ADR-016)."
+      changes:
+        - sqlFile:
+            path: 006_create_outbox_event.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/03_tables/006_create_outbox_event.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false
