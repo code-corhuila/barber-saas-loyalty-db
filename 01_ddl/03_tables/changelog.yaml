@@ -50,3 +50,20 @@ databaseChangeLog:
             relativeToChangelogFile: true
             splitStatements: false
             stripComments: false
+  - changeSet:
+      id: ddl-tables-004
+      author: JUANDAX233
+      labels: "HU-LOY-001,ddl,tables"
+      comment: "reward_coupon: issued by a redemption, ACTIVE until it pays an appointment (FR-015, FR-010)."
+      changes:
+        - sqlFile:
+            path: 004_create_reward_coupon.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/03_tables/004_create_reward_coupon.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false
