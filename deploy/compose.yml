@@ -1,0 +1,25 @@
+# Only the migration runner of the loyalty schema (Annex J J.2, J.7): no database service and
+# no volume. The single PostgreSQL instance is defined in barber-saas-infra-postgres; this runner applies
+# the pending changesets to it, with its own changelog tables (J.6). It starts only on demand:
+#   docker compose --env-file env/dev.env run --rm loyalty-db-migrate     (from barber-saas-infra-postgres)
+services:
+  loyalty-db-migrate:
+    image: liquibase/liquibase:4.29
+    profiles: [tooling]
+    volumes:
+      - ../:/workspace:ro
+    entrypoint: ["liquibase",
+      "--search-path=/workspace",
+      "--changelog-file=changelog/changelog-master.yaml",
+      "--url=jdbc:postgresql://postgres:5432/${PG_DATABASE:?set PG_DATABASE}",
+      "--username=${PG_ADMIN_USER:?set PG_ADMIN_USER}",
+      "--password=${PG_ADMIN_PASSWORD:?set PG_ADMIN_PASSWORD}",
+      "--database-changelog-table-name=databasechangelog_loyalty",
+      "--database-changelog-lock-table-name=databasechangeloglock_loyalty"]
+    command: ["update"]
+    networks: [platform]
+
+networks:
+  platform:
+    name: platform
+    external: true
