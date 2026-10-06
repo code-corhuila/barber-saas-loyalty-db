@@ -16,3 +16,20 @@ databaseChangeLog:
             relativeToChangelogFile: true
             splitStatements: false
             stripComments: false
+  - changeSet:
+      id: ddl-tables-002
+      author: JUANDAX233
+      labels: "HU-LOY-001,ddl,tables"
+      comment: "loyalty_card: one per client and barbershop, created with the first sticker (DEC-LOY-03)."
+      changes:
+        - sqlFile:
+            path: 002_create_loyalty_card.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/03_tables/002_create_loyalty_card.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false
