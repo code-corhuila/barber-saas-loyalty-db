@@ -1,0 +1,3 @@
+# Deliberately empty: extensions belong to the whole instance and are created by
+# barber-saas-infra-postgres (postgres/init/01-instance.sh), never by a -db (Annex J J.4).
+databaseChangeLog: []
