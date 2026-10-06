@@ -101,3 +101,20 @@ databaseChangeLog:
             relativeToChangelogFile: true
             splitStatements: false
             stripComments: false
+  - changeSet:
+      id: ddl-tables-007
+      author: JUANDAX233
+      labels: "HU-LOY-001,ddl,tables"
+      comment: "processed_event: an event delivered twice is processed once (ADR-016, at-least-once delivery)."
+      changes:
+        - sqlFile:
+            path: 007_create_processed_event.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/03_tables/007_create_processed_event.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false
