@@ -1,1 +1,18 @@
-databaseChangeLog: []
+databaseChangeLog:
+  - changeSet:
+      id: ddl-tables-001
+      author: JUANDAX233
+      labels: "HU-LOY-001,ddl,tables"
+      comment: "loyalty_rewards_config: one reward rule per barbershop, behind /loyalty/config."
+      changes:
+        - sqlFile:
+            path: 001_create_loyalty_rewards_config.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/03_tables/001_create_loyalty_rewards_config.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false
