@@ -1,1 +1,18 @@
-databaseChangeLog: []
+databaseChangeLog:
+  - changeSet:
+      id: ddl-indexes-001
+      author: JUANDAX233
+      labels: "HU-LOY-001,ddl,indexes"
+      comment: "The cards of a barbershop, the history of a card, one sticker per appointment, a client's coupons and the pending events."
+      changes:
+        - sqlFile:
+            path: 001_create_indexes.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/10_indexes/001_create_indexes.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false
