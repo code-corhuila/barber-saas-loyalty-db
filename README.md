@@ -54,7 +54,7 @@ appointments are referenced by id with no foreign key.
 - **One sticker per completed appointment** is a database rule:
   `uq_loyalty_transaction_sticker_per_appointment` (unique `appointment_id` among `STICKER_EARNED`),
   because the sticker arrives by event and can be delivered twice (ADR-016).
-- **`processed_event`** keeps the id of every event already handled, written in the same
+- **`processed_event`** (`event_id`, `event_type`, `processed_at`) keeps the id of every event already handled, written in the same
   transaction as its effect, so a redelivered `AppointmentCompleted` answers `DUPLICATE` without
   acting again — also for an event that was `IGNORED` (no active program, a walk-in).
 - `outbox_event` carries `failed_at` and `last_error` from the start, with the partial index the
