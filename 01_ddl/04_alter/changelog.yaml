@@ -1,1 +1,18 @@
-databaseChangeLog: []
+databaseChangeLog:
+  - changeSet:
+      id: ddl-alter-001
+      author: JUANDAX233
+      labels: "HU-LOY-001,ddl,alter"
+      comment: "processed_event: drop outcome, to match the model of 06-data/models.md §10 (event_id, event_type, processed_at)."
+      changes:
+        - sqlFile:
+            path: 001_drop_processed_event_outcome.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false
+      rollback:
+        - sqlFile:
+            path: ../../05_rollbacks/01_ddl/04_alter/001_drop_processed_event_outcome.rollback.sql
+            relativeToChangelogFile: true
+            splitStatements: false
+            stripComments: false
